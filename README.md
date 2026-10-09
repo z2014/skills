@@ -5,7 +5,7 @@
 | 路径 | 内容 |
 | --- | --- |
 | `AGENTS.md` | 加入全局指令文件的核心开发原则 |
-| `dev-principles/SKILL.md` | 统一语言、贯通路径和深模块的执行清单 |
+| `dev-principles/SKILL.md` | 开发原则 |
 
 ## 安装
 
