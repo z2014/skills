@@ -1,11 +1,11 @@
 ---
 name: dev-principles
-description: "Development principles: ubiquitous language, tracer bullets, deep modules. Use before non-trivial feature work, cross-module changes, refactoring, or design review; not needed for simple single-point fixes. 开发原则：统一语言、贯通路径、深模块。在开始非琐碎的功能开发、跨模块修改、重构或设计评审前使用；简单的单点修复不需要。"
+description: "Development principles: ubiquitous language, tracer bullets, deep modules, unidirectional dependencies. Use before non-trivial feature work, cross-module changes, refactoring, dependency or module-boundary changes, or design review; not needed for simple single-point fixes. 开发原则：统一语言、贯通路径、深模块、单向依赖。在开始非琐碎的功能开发、跨模块修改、重构、调整依赖或模块边界、设计评审前使用；简单的单点修复不需要。"
 ---
 
 # 开发原则
 
-用准确的语言定义问题，用最小的真实路径验证方向，用简单的接口封装复杂性。
+用准确的语言定义问题，用最小的真实路径验证方向，用简单的接口封装复杂性，用单向的依赖控制变化的影响范围。
 
 ## 统一语言（Ubiquitous Language）
 
@@ -32,6 +32,15 @@ description: "Development principles: ubiquitous language, tracer bullets, deep 
   - 同一规则或格式是否散落在多个模块？
   - 调用者是否必须按固定顺序组合多个调用？
 - 贯通路径跑通后，扩展前检查一遍边界，清理为了打通而临时加的浅层。
+
+## 单向依赖（Unidirectional Dependencies）
+
+- 依赖只朝一个方向：入口、界面和基础设施依赖业务核心；业务核心不依赖框架、数据库、界面或外部服务的具体实现。
+- 模块之间不形成环。新增 import 或调用前，确认不会让两个模块互相依赖。
+- 下层需要通知上层或调用外部能力时，由下层定义接口、回调或事件，上层实现或订阅；不反向 import 上层。
+- 依赖朝更稳定的方向：容易变化的模块依赖不容易变化的模块，而不是相反。
+- 项目已有分层或依赖检查规则时，遵守并运行检查（例如 dependency-cruiser、import-linter、ArchUnit）；没有时，在评审中检查新增依赖的方向。
+- 贯通路径为了先跑通而临时引入的反向依赖或循环依赖，在扩展前清理。
 
 ## 交付
 

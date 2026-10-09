@@ -8,8 +8,8 @@
     {
       "name": "skills",
       "source": "./",
-      "description": "Development principles: ubiquitous language, tracer bullets, deep modules.",
-      "version": "0.1.0",
+      "description": "Development principles: ubiquitous language, tracer bullets, deep modules, unidirectional dependencies.",
+      "version": "0.2.0",
       "license": "MIT"
     }
   ]

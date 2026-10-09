@@ -8,7 +8,7 @@ Agent skills that follow the open [Agent Skills](https://agentskills.io) format.
 
 | Skill | Description |
 | --- | --- |
-| [`dev-principles`](skills/dev-principles/SKILL.md) | Development principles: ubiquitous language, tracer bullets, deep modules |
+| [`dev-principles`](skills/dev-principles/SKILL.md) | Development principles: ubiquitous language, tracer bullets, deep modules, unidirectional dependencies |
 
 The skill content is written in Chinese. The skill description is bilingual so that agents can select the skill in either language.
 
@@ -48,6 +48,7 @@ Agents read skill descriptions in every session and load the full skill when a t
 - Tracer bullets: *The Pragmatic Programmer*, David Thomas and Andrew Hunt
 - Deep modules: *A Philosophy of Software Design*, John Ousterhout
 - Ubiquitous language: *Domain-Driven Design*, Eric Evans
+- Unidirectional dependencies: the Acyclic and Stable Dependencies Principles in *Agile Software Development: Principles, Patterns, and Practices*, and the Dependency Rule in *Clean Architecture*, Robert C. Martin
 
 ## 中文
 
@@ -93,6 +94,7 @@ Agent 在每次会话中都会读取 skill 的描述，并在任务匹配时加�
 - 贯通路径（Tracer Bullet）：《程序员修炼之道》
 - 深模块（Deep Modules）：《软件设计哲学》
 - 统一语言（Ubiquitous Language）：《领域驱动设计》
+- 单向依赖（Unidirectional Dependencies）：《敏捷软件开发：原则、模式与实践》中的无环依赖原则与稳定依赖原则，《架构整洁之道》中的依赖规则
 
 ## License
 
