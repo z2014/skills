@@ -1,6 +1,6 @@
 ---
 name: dev-principles
-description: 开始非琐碎的功能开发、跨模块修改、重构或设计评审时使用。提供统一语言、贯通路径（tracer bullet）和深模块三项原则的执行清单。简单的单点修复不需要。
+description: "Development principles: ubiquitous language, tracer bullets, deep modules. Use before non-trivial feature work, cross-module changes, refactoring, or design review; not needed for simple single-point fixes. 开发原则：统一语言、贯通路径、深模块。在开始非琐碎的功能开发、跨模块修改、重构或设计评审前使用；简单的单点修复不需要。"
 ---
 
 # 开发原则

@@ -1,0 +1,10 @@
+{
+  "name": "skills",
+  "version": "0.1.0",
+  "description": "Agent skills by z2014: development principles (ubiquitous language, tracer bullets, deep modules).",
+  "author": { "name": "z2014", "url": "https://github.com/z2014" },
+  "homepage": "https://github.com/z2014/skills",
+  "repository": "https://github.com/z2014/skills",
+  "license": "MIT",
+  "keywords": ["skills", "development-principles", "ddd", "tracer-bullet", "deep-modules"]
+}
