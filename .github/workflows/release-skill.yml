@@ -1,0 +1,78 @@
+# Publish one skill when a tag named <skill>-v<version> is pushed.
+# diagram-v0.1.0 zips skills/diagram with archive root diagram/ as diagram-0.1.0.zip
+# and attaches it to the GitHub Release for that tag. frontend-dev-v0.3.6 works the same way.
+
+name: Release skill
+
+on:
+  push:
+    tags:
+      - "*-v*"
+
+permissions:
+  contents: write
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Zip the skill and attach it to the release
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          set -euo pipefail
+          tag="${GITHUB_REF_NAME}"
+          skill="${tag%-v*}"
+          version="${tag##*-v}"
+          if [[ "${skill}" == "${tag}" || -z "${version}" ]]; then
+            echo "Tag must match <skill>-v<version>, got ${tag}" >&2
+            exit 1
+          fi
+          if [[ ! "${skill}" =~ ^[A-Za-z0-9][A-Za-z0-9._-]*$ ]]; then
+            echo "Skill name ${skill} is not a single path segment" >&2
+            exit 1
+          fi
+          if [[ ! -d "skills/${skill}" ]]; then
+            echo "Missing skills/${skill} for tag ${tag}" >&2
+            exit 1
+          fi
+          archive="${skill}-${version}.zip"
+          python3 - "${skill}" "${archive}" <<'PY'
+          import os
+          import sys
+          import zipfile
+
+          skill, archive = sys.argv[1], sys.argv[2]
+          root = os.path.join("skills", skill)
+          with zipfile.ZipFile(archive, "w", compression=zipfile.ZIP_DEFLATED) as zf:
+              for dirpath, dirnames, filenames in os.walk(root):
+                  dirnames[:] = [name for name in dirnames if name != "__pycache__"]
+                  for name in sorted(filenames):
+                      if name.endswith(".pyc"):
+                          continue
+                      full = os.path.join(dirpath, name)
+                      arcname = os.path.relpath(full, "skills").replace(os.sep, "/")
+                      zf.write(full, arcname)
+          PY
+          python3 - "${skill}" "${archive}" <<'PY'
+          import sys
+          import zipfile
+
+          skill, archive = sys.argv[1], sys.argv[2]
+          with zipfile.ZipFile(archive) as zf:
+              names = zf.namelist()
+          bad = [name for name in names if not name.startswith(skill + "/")]
+          if not names or bad:
+              sys.exit(f"archive root must be {skill}/, got {names[:5]}")
+          print(f"packed {len(names)} files into {archive}")
+          PY
+          title="${skill} ${version}"
+          notes="Zip of the ${skill} skill, version ${version}. Archive root is ${skill}/."
+          if gh release view "${tag}" >/dev/null 2>&1; then
+            gh release upload "${tag}" "${archive}" --clobber
+          else
+            gh release create "${tag}" "${archive}" --title "${title}" --notes "${notes}"
+          fi

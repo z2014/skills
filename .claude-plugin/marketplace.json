@@ -1,6 +1,11 @@
 {
+  "$schema": "https://json.schemastore.org/claude-code-marketplace.json",
   "name": "z2014",
-  "owner": { "name": "z2014", "url": "https://github.com/z2014" },
+  "description": "Agent skills by z2014.",
+  "owner": {
+    "name": "z2014",
+    "url": "https://github.com/z2014"
+  },
   "metadata": {
     "description": "Agent skills by z2014."
   },
@@ -9,8 +14,44 @@
       "name": "skills",
       "source": "./",
       "description": "Development principles: ubiquitous language, tracer bullets, deep modules, unidirectional dependencies; React frontend conventions; Feishu-whiteboard-style diagrams.",
-      "version": "0.4.0",
+      "version": "0.4.1",
       "license": "MIT"
+    },
+    {
+      "name": "diagram",
+      "source": "./skills/diagram",
+      "description": "Feishu-whiteboard-style diagrams: layered architecture, flowchart, sequence, and comparison matrix. Structured JSON rendered to a self-contained HTML preview, with a Mermaid fallback.",
+      "version": "0.1.0",
+      "license": "MIT",
+      "author": {
+        "name": "z2014",
+        "url": "https://github.com/z2014"
+      },
+      "homepage": "https://github.com/z2014/skills",
+      "repository": "https://github.com/z2014/skills",
+      "keywords": ["diagram", "architecture", "flowchart", "sequence", "mermaid"]
+    },
+    {
+      "name": "dev-principles",
+      "source": "./skills/dev-principles",
+      "description": "Development principles: ubiquitous language, tracer bullets, deep modules, unidirectional dependencies.",
+      "license": "MIT",
+      "author": {
+        "name": "z2014",
+        "url": "https://github.com/z2014"
+      },
+      "strict": false
+    },
+    {
+      "name": "frontend-dev",
+      "source": "./skills/frontend-dev",
+      "description": "React frontend conventions: Vite, Tailwind v4, shadcn/ui, TanStack Query, Zustand, project layout.",
+      "license": "MIT",
+      "author": {
+        "name": "z2014",
+        "url": "https://github.com/z2014"
+      },
+      "strict": false
     }
   ]
 }

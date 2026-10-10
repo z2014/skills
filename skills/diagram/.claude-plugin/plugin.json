@@ -1,0 +1,14 @@
+{
+  "$schema": "https://json.schemastore.org/claude-code-plugin-manifest.json",
+  "name": "diagram",
+  "version": "0.1.0",
+  "description": "Feishu-whiteboard-style diagrams: layered architecture, flowchart, sequence, and comparison matrix. Structured JSON rendered to a self-contained HTML preview, with a Mermaid fallback.",
+  "author": {
+    "name": "z2014",
+    "url": "https://github.com/z2014"
+  },
+  "homepage": "https://github.com/z2014/skills",
+  "repository": "https://github.com/z2014/skills",
+  "license": "MIT",
+  "keywords": ["diagram", "architecture", "flowchart", "sequence", "mermaid"]
+}

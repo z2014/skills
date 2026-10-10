@@ -1,5 +1,9 @@
 # Changelog
 
+## 0.4.1 - 2026-10-10
+
+- Publish a skill zip when a `<skill>-v<version>` tag is pushed, and document how to install `diagram` (Claude Code marketplace, Codex, release zip). The diagram skill version is 0.1.0.
+
 ## 0.4.0 - 2026-10-10
 
 - Add `diagram` skill: Feishu-whiteboard-style diagrams (layered architecture, flowchart, sequence, comparison matrix, and a Mermaid fallback) rendered from structured JSON with stable element ids.
