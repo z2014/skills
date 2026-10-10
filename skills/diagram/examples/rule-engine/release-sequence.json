@@ -1,0 +1,15 @@
+{
+  "type": "sequence",
+  "title": "放行后谁做什么",
+  "summary": "放行后由软件推分支，Agent 全程不碰推送凭证",
+  "participants": ["你", "工作台", "实现 Agent", "GitHub"],
+  "messages": [
+    {"from": "你", "to": "工作台", "text": "放行设计方案"},
+    {"from": "工作台", "to": "实现 Agent", "text": "进入实现阶段"},
+    {"from": "实现 Agent", "to": "工作台", "text": "diff + 测试报告", "reply": true},
+    {"from": "工作台", "to": "你", "text": "请求放行合并"},
+    {"from": "你", "to": "工作台", "text": "放行"},
+    {"from": "工作台", "to": "GitHub", "text": "推分支、建 PR"}
+  ],
+  "notes": [{"over": "实现 Agent", "after": 1, "text": "沙箱内自动执行"}]
+}

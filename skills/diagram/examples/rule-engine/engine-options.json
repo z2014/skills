@@ -1,0 +1,11 @@
+{
+  "type": "comparison-matrix",
+  "title": "工作流引擎选哪个",
+  "summary": "推荐自研状态机：单机场景足够，依赖最少",
+  "criteria": ["实现成本", "单机适配", "可测试性", "依赖体积"],
+  "options": [
+    {"name": "自研状态机", "recommended": true, "scores": ["good", "good", "good", "good"], "notes": ["约 1～2k 行", "", "事件回放", "无"]},
+    {"name": "XState", "scores": ["mid", "good", "good", "mid"], "notes": ["", "", "", "需要学习成本"]},
+    {"name": "Temporal", "scores": ["bad", "bad", "mid", "bad"], "notes": ["要部署服务", "为分布式设计", "", "需要服务端"]}
+  ]
+}

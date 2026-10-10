@@ -1,0 +1,28 @@
+<!doctype html><html lang="zh"><head><meta charset="utf-8">
+<title>规则引擎由什么组成</title><style>
+.layers{display:flex;flex-direction:column;gap:8px}
+.layer{display:flex;align-items:stretch;border:1px solid;border-radius:8px;padding:10px 12px;gap:12px}
+.ln{width:64px;flex:none;font-size:13px;font-weight:600;color:#646A73;display:flex;align-items:center}
+.mods{display:flex;gap:10px;flex-wrap:wrap;flex:1}
+.mod{border:1px solid;border-radius:6px;padding:8px 12px;min-width:120px;flex:1;max-width:220px}
+.mn{font-size:13px;font-weight:500;display:flex;align-items:center;gap:6px;white-space:nowrap}
+.badge{font-size:11px;border-radius:3px;padding:0 4px;font-weight:400}
+.code{font-size:11px;color:#8F959E;font-family:Menlo,monospace;margin-top:2px}
+.note{font-size:11px;color:#646A73;margin-top:2px}
+</style>
+<style>
+*{box-sizing:border-box}
+body{margin:0;font-family:"PingFang SC", "Noto Sans CJK SC", "Microsoft YaHei", sans-serif;color:#1F2329;background:#F8F9FA;
+background-image:radial-gradient(#D5D8DD 1px,transparent 1px);background-size:18px 18px;padding:32px}
+.card{background:#FFFFFF;border:1px solid #DEE0E3;border-radius:12px;padding:20px 24px 24px;
+box-shadow:0 2px 8px rgba(31,35,41,.06);display:inline-block;min-width:520px;max-width:100%}
+.hd{display:flex;align-items:center;gap:8px;margin-bottom:4px}
+.tag{font-size:12px;color:#3370FF;background:#EEF3FF;border-radius:4px;padding:2px 6px}
+h1{font-size:16px;margin:0;font-weight:600}
+.sum{font-size:13px;color:#646A73;margin:2px 0 16px}
+.legend{display:flex;gap:14px;font-size:12px;color:#646A73;margin-top:14px}
+.legend i{display:inline-block;width:12px;height:12px;border-radius:3px;margin-right:4px;vertical-align:-2px;border:1.5px solid}
+</style></head><body><div class="card">
+<div class="hd"><span class="tag">架构图</span><h1>规则引擎由什么组成</h1></div>
+<div class="sum">新增规则层三个模块和事件日志，执行层两个适配器需要修改</div>
+<div class="layers"><div class="layer" style="background:#EEF3FF;border-color:#C9D8FF"><div class="ln">交互层</div><div class="mods"><div class="mod" style="background:#FFFFFF;border-color:#DEE0E3;border-width:1px"><div class="mn">工作台界面</div><div class="code">app/</div></div><div class="mod" style="background:#FFFFFF;border-color:#DEE0E3;border-width:1px"><div class="mn">命令行</div><div class="code">cli/</div></div></div></div><div class="layer" style="background:#FFF8DB;border-color:#F5E2A0"><div class="ln">协调层</div><div class="mods"><div class="mod" style="background:#FFFFFF;border-color:#DEE0E3;border-width:1px"><div class="mn">协调 Agent</div><div class="note">只读，只能调受限工具</div></div></div></div><div class="layer" style="background:#F1ECFF;border-color:#D6CCFA"><div class="ln">规则层</div><div class="mods"><div class="mod" style="background:#DDF5E7;border-color:#34C77B;border-width:1.5px"><div class="mn">受限工具集<span class="badge" style="color:#1F7A4D;background:#DDF5E7">新增</span></div><div class="code">mcp/</div></div><div class="mod" style="background:#DDF5E7;border-color:#34C77B;border-width:1.5px"><div class="mn">规则引擎<span class="badge" style="color:#1F7A4D;background:#DDF5E7">新增</span></div><div class="code">engine/</div><div class="note">确定性状态机</div></div><div class="mod" style="background:#DDF5E7;border-color:#34C77B;border-width:1.5px"><div class="mn">护栏计数<span class="badge" style="color:#1F7A4D;background:#DDF5E7">新增</span></div><div class="code">guard/</div></div></div></div><div class="layer" style="background:#E9EEFB;border-color:#C7D2F0"><div class="ln">执行层</div><div class="mods"><div class="mod" style="background:#FFF0D6;border-color:#F5A524;border-width:1.5px"><div class="mn">Codex 适配<span class="badge" style="color:#A15C00;background:#FFF0D6">修改</span></div><div class="code">adapters/codex</div></div><div class="mod" style="background:#FFF0D6;border-color:#F5A524;border-width:1.5px"><div class="mn">Claude 适配<span class="badge" style="color:#A15C00;background:#FFF0D6">修改</span></div><div class="code">adapters/claude</div></div><div class="mod" style="background:#FFFFFF;border-color:#DEE0E3;border-width:1px"><div class="mn">worktree 沙箱</div></div></div></div><div class="layer" style="background:#F2F3F5;border-color:#DEE0E3"><div class="ln">存储层</div><div class="mods"><div class="mod" style="background:#FFFFFF;border-color:#DEE0E3;border-width:1px"><div class="mn">workflow.yaml</div></div><div class="mod" style="background:#DDF5E7;border-color:#34C77B;border-width:1.5px"><div class="mn">事件日志<span class="badge" style="color:#1F7A4D;background:#DDF5E7">新增</span></div><div class="code">events.db</div></div><div class="mod" style="background:#FFFFFF;border-color:#DEE0E3;border-width:1px"><div class="mn">产出物 Markdown</div></div></div></div></div><div class="legend"><span><i style="background:#DDF5E7;border-color:#34C77B"></i>新增</span><span><i style="background:#FFF0D6;border-color:#F5A524"></i>修改</span></div></div></body></html>

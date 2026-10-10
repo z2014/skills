@@ -1,5 +1,9 @@
 # Changelog
 
+## 0.4.0 - 2026-10-10
+
+- Add `diagram` skill: Feishu-whiteboard-style diagrams (layered architecture, flowchart, sequence, comparison matrix, timeline) rendered from structured JSON.
+
 ## 0.3.6 - 2026-10-10
 
 - Make `eslint-config-tencent` the default ESLint baseline in `frontend-dev`, with react-hooks rules and Prettier aligned to the Tencent style.
