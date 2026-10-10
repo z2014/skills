@@ -1,5 +1,9 @@
 # Changelog
 
+## 0.3.1 - 2026-10-10
+
+- Remove the reporting step from `frontend-dev` verification.
+
 ## 0.3.0 - 2026-10-10
 
 - Add `frontend-dev` skill: React frontend stack, project layout, state, API, styling, accessibility, performance, security, and verification conventions.
