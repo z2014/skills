@@ -1,5 +1,9 @@
 # Changelog
 
+## 0.3.0 - 2026-10-10
+
+- Add `frontend-dev` skill: React frontend stack, project layout, state, API, styling, accessibility, performance, security, and verification conventions.
+
 ## 0.2.0 - 2026-10-09
 
 - Add the unidirectional dependencies principle to `dev-principles`.

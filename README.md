@@ -9,8 +9,9 @@ Agent skills that follow the open [Agent Skills](https://agentskills.io) format.
 | Skill | Description |
 | --- | --- |
 | [`dev-principles`](skills/dev-principles/SKILL.md) | Development principles: ubiquitous language, tracer bullets, deep modules, unidirectional dependencies |
+| [`frontend-dev`](skills/frontend-dev/SKILL.md) | React frontend conventions: Vite, Tailwind v4, shadcn/ui, TanStack Query, Zustand, project layout |
 
-The skill content is written in Chinese. The skill description is bilingual so that agents can select the skill in either language.
+The skill content is written in Chinese. Skill descriptions are bilingual so that agents can select the skills in either language.
 
 ### Install
 
@@ -57,6 +58,7 @@ Agents read skill descriptions in every session and load the full skill when a t
 | Skill | 说明 |
 | --- | --- |
 | [`dev-principles`](skills/dev-principles/SKILL.md) | 开发原则 |
+| [`frontend-dev`](skills/frontend-dev/SKILL.md) | React 前端开发规范 |
 
 ### 安装
 
