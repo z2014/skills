@@ -76,9 +76,8 @@ src/
   - 所有失败（网络错误、HTTP 错误、业务错误）转换为统一的 `ApiError` 类型，包含 HTTP 状态码、`code` 和 `message`；上层只处理这一种错误。
   - 记录错误日志：开发环境输出到控制台，生产环境上报到监控服务。日志中不记录 token、密码等敏感信息。
   - 默认弹出错误提示。单个请求可以通过请求配置关闭（例如 `silent: true`），由页面自行处理。
-  - 401 统一处理：刷新 token 或跳转登录页。多个请求同时返回 401 时只刷新一次，其余请求等待刷新完成后重试。
   - 主动取消的请求不弹窗，也不记录错误日志。
-- 获取 token、弹出提示、跳转登录页需要用到 `store` 和界面层，但 `api` 不能反向依赖它们。由 `api/client` 提供配置函数（例如 `configureHttpClient({ getToken, notifyError, onUnauthorized })`），在 `main.tsx` 中注入具体实现。
+- 获取 token、弹出提示需要用到 `store` 和界面层，但 `api` 不能反向依赖它们。由 `api/client` 提供配置函数（例如 `configureHttpClient({ getToken, notifyError })`），在 `main.tsx` 中注入具体实现。
 - 自定义请求配置（如 `silent`）通过 TypeScript 模块扩展声明类型，不使用 `any`。
 - 业务请求函数按领域放在 `src/api/<domain>/index.ts`，调用全局实例，并用 Zod 校验 `data` 的结构。
 - 与 TanStack Query 配合：把 Query 提供的 `signal` 传给 axios，以支持取消请求；错误提示已经在拦截器中处理，Query 的 `onError` 中不再重复弹窗。

@@ -1,5 +1,9 @@
 # Changelog
 
+## 0.3.4 - 2026-10-10
+
+- Remove 401 handling from `frontend-dev` network request conventions.
+
 ## 0.3.3 - 2026-10-10
 
 - Add network request conventions to `frontend-dev`: a single global axios instance, the `{ code, data, message }` response envelope, and centralized headers, errors, logging, and notifications.
