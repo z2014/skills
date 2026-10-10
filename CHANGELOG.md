@@ -2,7 +2,7 @@
 
 ## 0.4.0 - 2026-10-10
 
-- Add `diagram` skill: Feishu-whiteboard-style diagrams (layered architecture, flowchart, sequence, comparison matrix, timeline) rendered from structured JSON.
+- Add `diagram` skill: Feishu-whiteboard-style diagrams (layered architecture, flowchart, sequence, comparison matrix, and a Mermaid fallback) rendered from structured JSON with stable element ids.
 
 ## 0.3.6 - 2026-10-10
 

@@ -24,6 +24,18 @@ class Invalid(Exception):
     pass
 
 
+def claim_id(ident, seen, errs, label):
+    """Require a non-empty, diagram-unique string id. Returns True when it can be anchored."""
+    if not isinstance(ident, str) or not ident.strip():
+        errs.append(f"{label} 缺少 id")
+        return False
+    if ident in seen:
+        errs.append(f"id {ident!r} 重复（{label}）")
+        return False
+    seen.add(ident)
+    return True
+
+
 # ---------------------------------------------------------------- 校验
 def check(d):
     errs, warns = [], []
@@ -45,21 +57,25 @@ def check(d):
         layers = d.get("layers") or []
         if not layers:
             errs.append("layers 为空")
-        count(sum(len(l.get("modules", [])) for l in layers), "模块")
-        for l in layers:
-            for m in l.get("modules", []):
-                if m.get("status") not in (None, "new", "changed", "risk"):
-                    errs.append(f"模块 {m.get('name')} 的 status 只能是 new/changed/risk")
+        modules = [m for l in layers for m in (l.get("modules") or [])]
+        count(len(modules), "模块")
+        seen = set()
+        for m in modules:
+            if not isinstance(m, dict):
+                errs.append("模块需要是对象")
+                continue
+            claim_id(m.get("id"), seen, errs, f"模块 {m.get('name') or ''}".strip())
+            if m.get("status") not in (None, "new", "changed", "risk"):
+                errs.append(f"模块 {m.get('name')} 的 status 只能是 new/changed/risk")
     elif t == "flowchart":
         nodes, edges = d.get("nodes") or [], d.get("edges") or []
-        ids = {n.get("id") for n in nodes}
         count(len(nodes), "节点")
-        starts = [n for n in nodes if n.get("kind") == "start"]
-        if len(starts) != 1:
-            errs.append(f"需要恰好一个 start 节点，当前 {len(starts)} 个")
-        if not any(n.get("kind") == "end" for n in nodes):
-            errs.append("缺少 end 节点")
+        seen = set()
         for n in nodes:
+            if not isinstance(n, dict):
+                errs.append("节点需要是对象")
+                continue
+            claim_id(n.get("id"), seen, errs, f"节点 {n.get('text') or ''}".strip())
             if n.get("kind") not in ("start", "end", "step", "decision", "error"):
                 errs.append(f"节点 {n.get('id')} 的 kind 无效")
             if n.get("kind") == "decision":
@@ -68,14 +84,24 @@ def check(d):
                     warns.append(f"判断节点 {n.get('id')} 应该恰好两个出口，当前 {len(outs)} 个")
                 if any(not e.get("label") for e in outs):
                     warns.append(f"判断节点 {n.get('id')} 的出口缺少 label")
+        starts = [n for n in nodes if isinstance(n, dict) and n.get("kind") == "start"]
+        if len(starts) != 1:
+            errs.append(f"需要恰好一个 start 节点，当前 {len(starts)} 个")
+        if not any(isinstance(n, dict) and n.get("kind") == "end" for n in nodes):
+            errs.append("缺少 end 节点")
         for e in edges:
-            if e.get("from") not in ids or e.get("to") not in ids:
+            if e.get("from") not in seen or e.get("to") not in seen:
                 errs.append(f"连线 {e.get('from')} -> {e.get('to')} 指向不存在的节点")
     elif t == "sequence":
         ps = d.get("participants") or []
         if len(ps) > 6:
             warns.append(f"参与方 {len(ps)} 个，建议 ≤ 6")
+        seen = set()
         for m in d.get("messages") or []:
+            if not isinstance(m, dict):
+                errs.append("消息需要是对象")
+                continue
+            claim_id(m.get("id"), seen, errs, f"消息 {m.get('text') or ''}".strip())
             for k in ("from", "to"):
                 if m.get(k) not in ps:
                     errs.append(f"消息里的 {m.get(k)!r} 不在 participants 中")
@@ -85,18 +111,38 @@ def check(d):
         crit, opts = d.get("criteria") or [], d.get("options") or []
         if not 2 <= len(opts) <= 4:
             warns.append(f"方案数 {len(opts)}，建议 2～4 个")
+        row_ids, col_ids = [], []
+        seen_rows, seen_cols = set(), set()
+        for c in crit:
+            if not isinstance(c, dict) or not c.get("name"):
+                errs.append("每个维度都要有 id 和 name")
+                continue
+            if claim_id(c.get("id"), seen_rows, errs, f"维度 {c.get('name')}"):
+                row_ids.append(c["id"])
         for o in opts:
+            if not isinstance(o, dict) or not o.get("name"):
+                errs.append("每个方案都要有 id 和 name")
+                continue
+            if claim_id(o.get("id"), seen_cols, errs, f"方案 {o.get('name')}"):
+                col_ids.append(o["id"])
             if len(o.get("scores", [])) != len(crit):
                 errs.append(f"方案 {o.get('name')} 的 scores 数量和 criteria 不一致")
             for s in o.get("scores", []):
                 if s not in ("good", "mid", "bad"):
                     errs.append(f"方案 {o.get('name')} 的分数 {s!r} 无效")
-        if sum(1 for o in opts if o.get("recommended")) > 1:
+        if sum(1 for o in opts if isinstance(o, dict) and o.get("recommended")) > 1:
             errs.append("recommended 最多一个")
-    elif t == "timeline":
-        ms = d.get("milestones") or []
-        if len(ms) > 6:
-            warns.append(f"里程碑 {len(ms)} 个，建议 ≤ 6")
+        used = set(row_ids)
+        for cid in col_ids:
+            if cid in used:
+                errs.append(f"方案 id {cid!r} 与维度 id 重复")
+            used.add(cid)
+        for rid in row_ids:
+            for cid in col_ids:
+                cell = f"{rid} x {cid}"
+                if cell in used:
+                    errs.append(f"单元格锚点 {cell!r} 与其他 id 重复")
+                used.add(cell)
     elif t == "general":
         if not d.get("mermaid"):
             errs.append("general 类型需要 mermaid 字段")
@@ -148,7 +194,8 @@ def render_layered(d):
             code = f'<div class="code">{esc(m["code"])}</div>' if m.get("code") else ""
             note = f'<div class="note">{esc(m["note"])}</div>' if m.get("note") else ""
             badge = f'<span class="badge" style="color:{s["text"]};background:{s["fill"]}">{s["label"]}</span>' if st != "none" else ""
-            mods.append(f'<div class="mod" style="background:{"#FFFFFF" if st=="none" else s["fill"]};'
+            mods.append(f'<div class="mod" data-id="{esc(m["id"])}" '
+                        f'style="background:{"#FFFFFF" if st=="none" else s["fill"]};'
                         f'border-color:{s["stroke"]};border-width:{1 if st=="none" else 1.5}px">'
                         f'<div class="mn">{esc(m["name"])}{badge}</div>{code}{note}</div>')
         rows.append(f'<div class="layer" style="background:{c["fill"]};border-color:{c["stroke"]}">'
@@ -214,10 +261,12 @@ def shape(n, x, y):
     txt = f'<text x="{x}" y="{y+4.5}" text-anchor="middle" font-size="13" fill="{T["text"]}">{esc(n["text"])}</text>'
     if k == "decision":
         pts = f"{x},{y-h/2} {x+w/2},{y} {x},{y+h/2} {x-w/2},{y}"
-        return f'<polygon points="{pts}" fill="{c["fill"]}" stroke="{c["stroke"]}" stroke-width="1.5"/>' + txt
-    r = h / 2 if k in ("start", "end") else 6
-    return (f'<rect x="{x-w/2}" y="{y-h/2}" width="{w}" height="{h}" rx="{r}" '
-            f'fill="{c["fill"]}" stroke="{c["stroke"]}" stroke-width="1.5"/>' + txt)
+        body = f'<polygon points="{pts}" fill="{c["fill"]}" stroke="{c["stroke"]}" stroke-width="1.5"/>' + txt
+    else:
+        r = h / 2 if k in ("start", "end") else 6
+        body = (f'<rect x="{x-w/2}" y="{y-h/2}" width="{w}" height="{h}" rx="{r}" '
+                f'fill="{c["fill"]}" stroke="{c["stroke"]}" stroke-width="1.5"/>' + txt)
+    return f'<g data-id="{esc(n["id"])}">{body}</g>'
 
 
 def render_flow(d):
@@ -269,7 +318,7 @@ def render_flow(d):
 def render_matrix(d):
     sc = T["score"]
     head = "<th></th>" + "".join(
-        f'<th class="{"rec" if o.get("recommended") else ""}">{esc(o["name"])}'
+        f'<th data-id="{esc(o["id"])}" class="{"rec" if o.get("recommended") else ""}">{esc(o["name"])}'
         f'{"<span class=r>推荐</span>" if o.get("recommended") else ""}</th>' for o in d["options"])
     rows = []
     for i, c in enumerate(d["criteria"]):
@@ -277,9 +326,10 @@ def render_matrix(d):
         for o in d["options"]:
             s = sc[o["scores"][i]]
             note = (o.get("notes") or [""] * len(d["criteria"]))[i] if i < len(o.get("notes") or []) else ""
-            cells.append(f'<td style="background:{s["fill"]};color:{s["text"]}"><b>{s["mark"]}</b>'
+            cells.append(f'<td data-id="{esc(c["id"] + " x " + o["id"])}" '
+                         f'style="background:{s["fill"]};color:{s["text"]}"><b>{s["mark"]}</b>'
                          f'{" " + esc(note) if note else ""}</td>')
-        rows.append(f'<tr><th class="c">{esc(c)}</th>{"".join(cells)}</tr>')
+        rows.append(f'<tr><th class="c" data-id="{esc(c["id"])}">{esc(c["name"])}</th>{"".join(cells)}</tr>')
     css = f"""<style>table{{border-collapse:separate;border-spacing:4px;font-size:13px}}
 th{{font-weight:600;padding:8px 12px;text-align:left;white-space:nowrap}} th.c{{color:{T['textSecondary']};font-weight:500}}
 th.rec{{color:{T['primary']}}} .r{{font-size:11px;font-weight:400;background:#EEF3FF;color:{T['primary']};border-radius:3px;padding:1px 5px;margin-left:6px}}
@@ -287,25 +337,64 @@ td{{padding:8px 12px;border-radius:6px;min-width:140px}} td b{{margin-right:2px}
     return page(d, f"<table><tr>{head}</tr>{''.join(rows)}</table>", css)
 
 
-# ---------------------------------------------------------------- 时间线
-def render_timeline(d):
-    used, items = set(), []
-    for m in d["milestones"]:
-        st = m.get("status") or "none"
-        used.add(st)
-        s = T["status"][st]
-        dl = "".join(f"<li>{esc(x)}</li>" for x in m.get("deliverables", []))
-        items.append(f'<div class="ms"><div class="dot" style="background:{s["stroke"] if st!="none" else T["primary"]}"></div>'
-                     f'<div class="when">{esc(m.get("when"))}</div>'
-                     f'<div class="box" style="background:{s["fill"]};border-color:{s["stroke"]}">'
-                     f'<div class="nm">{esc(m["name"])}</div><ul>{dl}</ul></div></div>')
-    css = f"""<style>.tl{{display:flex;gap:12px;position:relative;padding-top:8px}}
-.tl:before{{content:"";position:absolute;left:0;right:0;top:14px;border-top:2px solid {T['border']}}}
-.ms{{flex:1;min-width:150px;position:relative}} .dot{{width:12px;height:12px;border-radius:50%;margin:0 0 8px 0;position:relative;border:2px solid #fff}}
-.when{{font-size:12px;color:{T['textSecondary']};margin-bottom:6px}}
-.box{{border:1px solid;border-radius:8px;padding:10px 12px}} .nm{{font-size:13px;font-weight:600}}
-ul{{margin:6px 0 0;padding-left:16px;font-size:12px;color:{T['textSecondary']}}}</style>"""
-    return page(d, f'<div class="tl">{"".join(items)}</div>{legend(used)}', css)
+# ---------------------------------------------------------------- 时序图
+def render_sequence(d):
+    ps = d["participants"]
+    idx = {p: i for i, p in enumerate(ps)}
+    msgs = d.get("messages") or []
+    col, pad = 156, 20
+    head_y, head_h = 16, 34
+    top = head_y + head_h + 28
+    row_h = 54
+
+    def cx(i):
+        return pad + col * i + col / 2.0
+
+    W = int(pad * 2 + col * max(len(ps), 1))
+    H = int(top + row_h * max(len(msgs), 1) + 16)
+    heads, lines, items = [], [], []
+    for i, p in enumerate(ps):
+        x = cx(i)
+        heads.append(
+            f'<rect x="{x - 58}" y="{head_y}" width="116" height="{head_h}" rx="8" '
+            f'fill="#EEF3FF" stroke="#7A9CF5"/>'
+            f'<text x="{x}" y="{head_y + 22}" text-anchor="middle" font-size="13" fill="{T["text"]}">{esc(p)}</text>'
+        )
+        lines.append(
+            f'<line x1="{x}" y1="{head_y + head_h}" x2="{x}" y2="{H - 12}" '
+            f'stroke="{T["border"]}" stroke-dasharray="3 4"/>'
+        )
+    for mi, m in enumerate(msgs):
+        y = top + row_h * mi
+        x1, x2 = cx(idx[m["from"]]), cx(idx[m["to"]])
+        if m["from"] == m["to"]:
+            path = f"M{x1},{y} C{x1 + 36},{y - 18} {x1 + 36},{y + 18} {x1},{y + 28}"
+            label_x, label_y = x1 + 44, y + 4
+        else:
+            path = f"M{x1},{y} L{x2},{y}"
+            label_x, label_y = (x1 + x2) / 2.0, y - 8
+        dash = ' stroke-dasharray="5 4"' if m.get("reply") else ""
+        items.append(
+            f'<g data-id="{esc(m["id"])}">'
+            f'<path d="{path}" fill="none" stroke="{T["line"]}" stroke-width="1.3"{dash} marker-end="url(#ar)"/>'
+            f'<text x="{label_x}" y="{label_y}" text-anchor="middle" font-size="12" fill="{T["text"]}">{esc(m["text"])}</text>'
+            f'</g>'
+        )
+    for note in d.get("notes") or []:
+        over, ai = note.get("over"), note.get("after", 0)
+        if over not in idx or not isinstance(ai, int) or not 0 <= ai < len(msgs):
+            continue
+        items.append(
+            f'<text x="{cx(idx[over]) + 8}" y="{top + row_h * ai + 18}" font-size="11" '
+            f'fill="{T["textSecondary"]}">{esc(note.get("text"))}</text>'
+        )
+    svg = (
+        f'<svg width="{W}" height="{H}" viewBox="0 0 {W} {H}" xmlns="http://www.w3.org/2000/svg" '
+        f'font-family=\'{T["font"]}\'><defs><marker id="ar" viewBox="0 0 10 10" refX="9" refY="5" '
+        f'markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" '
+        f'fill="{T["line"]}"/></marker></defs>{"".join(lines)}{"".join(heads)}{"".join(items)}</svg>'
+    )
+    return page(d, svg)
 
 
 # ---------------------------------------------------------------- Mermaid
@@ -368,7 +457,7 @@ def to_mermaid(d):
             for i, crit in enumerate(d["criteria"]):
                 score = o["scores"][i]
                 note = notes[i] if i < len(notes) else ""
-                label = q(crit) + " " + sc[score]["mark"]
+                label = q(crit["name"]) + " " + sc[score]["mark"]
                 if note:
                     label += " " + q(note)
                 nid = f"O{oi}C{i}"
@@ -395,13 +484,12 @@ def render_mermaid_html(d):
 RENDERERS = {
     "layered-architecture": render_layered,
     "flowchart": render_flow,
-    "sequence": render_mermaid_html,
+    "sequence": render_sequence,
     "comparison-matrix": render_matrix,
-    "timeline": render_timeline,
     "general": render_mermaid_html,
 }
 TYPE_NAMES = {"layered-architecture": "架构图", "flowchart": "流程图", "sequence": "时序图",
-              "comparison-matrix": "方案对比", "timeline": "时间线", "general": "通用图"}
+              "comparison-matrix": "方案对比", "general": "通用图"}
 
 
 def main():
