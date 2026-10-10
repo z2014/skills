@@ -9,7 +9,7 @@
       "name": "skills",
       "source": "./",
       "description": "Development principles: ubiquitous language, tracer bullets, deep modules, unidirectional dependencies; React frontend conventions.",
-      "version": "0.3.1",
+      "version": "0.3.2",
       "license": "MIT"
     }
   ]

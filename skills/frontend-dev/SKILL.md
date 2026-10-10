@@ -29,13 +29,13 @@ description: "React frontend conventions: Vite, TypeScript, Tailwind v4, shadcn/
 ```text
 src/
 ├── main.tsx              # 应用入口，挂载全局 Provider
-├── router.tsx            # 路由表，每个路由指向 modules 下的模块
+├── router/index.tsx      # 路由表，每个路由指向 modules 下的模块
 ├── modules/              # 每个路由一个模块
 │   └── <module>/
 │       ├── index.tsx     # 页面组件（路由入口）
 │       ├── components/   # 仅本模块使用的组件
 │       ├── hooks/        # 本模块的 hooks
-│       └── store.ts      # 本模块的页面状态（需要时）
+│       └── store/        # 本模块的页面状态（需要时）
 ├── common/
 │   ├── components/       # 全局公共组件；shadcn/ui 组件放在 common/components/ui
 │   └── utils/            # 全局公共工具函数，包括 cn()
@@ -49,13 +49,18 @@ src/
 - 模块之间不互相 import。需要共享的内容提取到 `common/`；需要共享的状态放进 `store/`。
 - 配置 shadcn/ui 的 `components.json`，把组件路径设为 `@/common/components/ui`，工具函数路径设为 `@/common/utils`。
 
+## 按职责划分目录
+
+- 每个职责目录都通过 `index.ts`（包含 JSX 时为 `index.tsx`）暴露公共接口。外部代码只能通过这个入口导入，不能深入导入目录内部的文件。
+- 只有一个文件的职责也要有自己的目录。实现直接写在 `index.ts` 中，不另建文件再用一行代码重新导出。
+
 ## 状态
 
 按状态类型选择存放位置：
 
 - 服务端数据使用 TanStack Query，不复制到 Zustand 或组件 state 中。query key 和请求函数定义在 `api/` 中，模块中调用 `useQuery` / `useMutation`。
 - `store/` 只存放跨页面共享的全局状态，例如登录态、主题、全局配置。每个 store 只负责一个领域。
-- 页面状态放在所属模块内部：简单状态用 `useState` / `useReducer`；模块内多个组件共享的状态，放在模块的 `store.ts` 中。
+- 页面状态放在所属模块内部：简单状态用 `useState` / `useReducer`；模块内多个组件共享的状态，放在模块的 `store/` 中。
 - 筛选条件、分页和当前标签页放在 URL 参数中。
 - 能从已有状态计算出来的值，直接计算，不另外存储。
 
