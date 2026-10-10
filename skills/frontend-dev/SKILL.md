@@ -1,6 +1,6 @@
 ---
 name: frontend-dev
-description: "React frontend conventions: Vite, TypeScript, Tailwind v4, shadcn/ui, React Router, axios, TanStack Query, Zustand, React Hook Form + Zod, pnpm, and a modules/common/api/store project layout. Use when creating or changing React frontend code, pages, components, styles, state, or frontend tooling. React 前端开发规范：在新建或修改 React 页面、组件、样式、状态管理或前端工程配置时使用。"
+description: "React frontend conventions: Vite, TypeScript, Tailwind v4, shadcn/ui, React Router, axios, TanStack Query, Zustand, React Hook Form + Zod, ESLint (eslint-config-tencent) + Prettier, pnpm, and a modules/common/api/store project layout. Use when creating or changing React frontend code, pages, components, styles, state, or frontend tooling. React 前端开发规范：在新建或修改 React 页面、组件、样式、状态管理或前端工程配置时使用。"
 ---
 
 # React 前端开发
@@ -20,7 +20,7 @@ description: "React frontend conventions: Vite, TypeScript, Tailwind v4, shadcn/
 | 服务端数据 | TanStack Query |
 | 全局客户端状态 | Zustand |
 | 表单与校验 | React Hook Form + Zod |
-| 代码检查与格式化 | ESLint（typescript-eslint、react-hooks）+ Prettier（prettier-plugin-tailwindcss） |
+| 代码检查与格式化 | ESLint（eslint-config-tencent、react-hooks）+ Prettier（prettier-plugin-tailwindcss） |
 | 包管理 | pnpm；已有项目按 lockfile 使用对应的包管理器 |
 
 需要服务端渲染、SEO 或全栈能力时，不默认使用 Vite 单页应用，先与用户确认框架。
@@ -103,6 +103,40 @@ src/
 
 - 以 `VITE_` 开头的环境变量会打包进前端代码，不在其中存放密钥。
 - 不使用 `dangerouslySetInnerHTML` 渲染未经清理的内容。
+
+## 代码检查与格式化
+
+- ESLint 以 [`eslint-config-tencent`](https://www.npmjs.com/package/eslint-config-tencent) 为基础规则，使用它的 flat 配置（JavaScript、import/export、TypeScript 规则）。规则包不含 React 规则，另加 `eslint-plugin-react-hooks`。
+- 格式交给 Prettier：配置最后加入 `eslint-config-prettier`，关闭与 Prettier 冲突的格式规则。Prettier 选项与腾讯规范一致：`singleQuote: true`、`printWidth: 120`，其余用默认值。
+- 依赖：`eslint`、`eslint-config-tencent`、`@babel/core`（7.x，规则包的 peer 依赖）、`eslint-plugin-react-hooks`、`eslint-config-prettier`、`globals`、`prettier`、`prettier-plugin-tailwindcss`。
+- TypeScript 规则需要类型信息，每个被检查的 `.ts` / `.tsx` 文件都必须属于某个 tsconfig，否则会报解析错误。Vite 模板的根 `tsconfig.json` 只有 references，需把 `project` 设为各个子配置。
+- 项目只在此基础上按需收紧或覆盖个别规则，并注明原因；不整体关闭规则包。
+
+`eslint.config.js`：
+
+```js
+import tencent from 'eslint-config-tencent/flat';
+import prettier from 'eslint-config-prettier/flat';
+import reactHooks from 'eslint-plugin-react-hooks';
+import globals from 'globals';
+
+export default [
+  { ignores: ['dist'] },
+  ...tencent({
+    tsconfigRootDir: import.meta.dirname,
+    project: ['./tsconfig.app.json', './tsconfig.node.json'],
+  }),
+  { files: ['**/*.{ts,tsx}'], languageOptions: { globals: globals.browser } },
+  reactHooks.configs.flat.recommended,
+  prettier,
+];
+```
+
+`.prettierrc`：
+
+```json
+{ "singleQuote": true, "printWidth": 120, "plugins": ["prettier-plugin-tailwindcss"] }
+```
 
 ## 验证
 

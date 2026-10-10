@@ -1,5 +1,9 @@
 # Changelog
 
+## 0.3.6 - 2026-10-10
+
+- Make `eslint-config-tencent` the default ESLint baseline in `frontend-dev`, with react-hooks rules and Prettier aligned to the Tencent style.
+
 ## 0.3.5 - 2026-10-10
 
 - Condense `frontend-dev` network request conventions to core principles.
