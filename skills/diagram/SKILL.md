@@ -7,16 +7,16 @@ description: "Feishu-whiteboard-style diagrams for distilling AI output into one
 
 目标：把 AI 产出里人真正关心的信息提炼出来，用一张最直观的图呈现。**你只负责想清楚内容，输出结构化数据；样式和排版交给渲染脚本**，保证谁来画都长得一样（飞书画板风格）。
 
-唯一依赖是 `python3`（3.8+），没有第三方包。渲染脚本用相对 skill 目录的路径：`scripts/render.py`。
+唯一依赖是 `python3`（3.8+），没有第三方包。留在项目工作目录里渲染。`<skill-dir>` 是本 `SKILL.md` 所在的目录：用宿主给出的这个文件的路径，去掉末尾的 `SKILL.md`。
 
 ## 工作步骤
 
 1. **先写一句话结论**：这张图想让人得出什么判断。写不出来就说明还没想清楚，先别画。
 2. **选图**：按下表，一张图只回答一个问题。一个问题需要两种图时，画两张。
 3. **写数据**：按 `types/<类型>.md` 里的格式写一个 JSON 文件，例如 `diagram.json`。
-4. **渲染**：在 skill 目录下执行 `python3 scripts/render.py diagram.json -o diagram.html`，打开 HTML 检查。
+4. **渲染**：在项目工作目录执行 `python3 <skill-dir>/scripts/render.py diagram.json -o diagram.html`。`diagram.json` 和 `-o` 的路径都相对项目目录，HTML 写在项目里。打开 HTML 检查。
 5. **自检**（见文末清单），不通过就改数据重新渲染。
-6. **交付**：一句话结论 + HTML 文件路径；需要贴进 Markdown 时，加 `--mermaid` 参数输出 Mermaid 代码。
+6. **交付**：一句话结论 + HTML 文件路径；需要贴进 Markdown 时，执行 `python3 <skill-dir>/scripts/render.py diagram.json --mermaid`。
 
 如果环境里有 `draw_*` 这类 MCP 画图工具，优先直接调用工具（参数就是同一份 JSON）。没有 Python 时，直接输出 Mermaid，第一行加上下方兜底里的飞书主题。
 
@@ -74,7 +74,7 @@ description: "Feishu-whiteboard-style diagrams for distilling AI output into one
 
 ## 自检清单
 
-- [ ] 在 skill 目录下，JSON 能被 `python3 scripts/render.py` 正常渲染，没有报错或警告
+- [ ] 在项目工作目录执行 `python3 <skill-dir>/scripts/render.py diagram.json --check`，没有报错或警告
 - [ ] 一张图只回答 `title` 里那一个问题
 - [ ] 节点数没超限
 - [ ] 可评论元素都有图内唯一的 id；旧元素的 id 没有被改掉

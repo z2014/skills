@@ -12,6 +12,8 @@ Agent skills that follow the open [Agent Skills](https://agentskills.io) format.
 | [`frontend-dev`](skills/frontend-dev/SKILL.md) | React frontend conventions: Vite, Tailwind v4, shadcn/ui, TanStack Query, Zustand, project layout |
 | [`diagram`](skills/diagram/SKILL.md) | Feishu-whiteboard-style diagrams: layered architecture, flowchart, sequence, comparison matrix |
 
+![Layered architecture in the Feishu whiteboard style](skills/diagram/assets/preview.png)
+
 The skill content is written in Chinese. Skill descriptions are bilingual so that agents can select the skills in either language.
 
 ### Install
@@ -117,6 +119,8 @@ Agents read skill descriptions in every session and load the full skill when a t
 | [`dev-principles`](skills/dev-principles/SKILL.md) | 开发原则 |
 | [`frontend-dev`](skills/frontend-dev/SKILL.md) | React 前端开发规范 |
 | [`diagram`](skills/diagram/SKILL.md) | 飞书画板风格画图规范 |
+
+![飞书画板风格的分层架构图](skills/diagram/assets/preview.png)
 
 ### 安装
 

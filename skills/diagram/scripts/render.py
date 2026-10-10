@@ -1,10 +1,11 @@
 #!/usr/bin/env python3
 """把 diagram skill 的 JSON 数据渲染成飞书画板风格的自包含 HTML（零依赖，Python 3.8+）。
 
-用法:
-  python3 render.py diagram.json -o diagram.html   # 渲染 HTML
-  python3 render.py diagram.json --mermaid         # 输出 Mermaid 代码
-  python3 render.py diagram.json --check           # 只做结构校验
+用法（在项目工作目录执行。<skill-dir> 是本脚本上一级、含 SKILL.md 的目录。
+输入 JSON 和 -o 相对当前工作目录；theme.json 相对本脚本文件加载）:
+  python3 <skill-dir>/scripts/render.py diagram.json -o diagram.html
+  python3 <skill-dir>/scripts/render.py diagram.json --mermaid
+  python3 <skill-dir>/scripts/render.py diagram.json --check
 """
 import argparse, html, json, os, sys
 
