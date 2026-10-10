@@ -1,5 +1,9 @@
 # Changelog
 
+## 0.3.5 - 2026-10-10
+
+- Condense `frontend-dev` network request conventions to core principles.
+
 ## 0.3.4 - 2026-10-10
 
 - Remove 401 handling from `frontend-dev` network request conventions.
