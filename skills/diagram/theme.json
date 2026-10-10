@@ -1,0 +1,37 @@
+{
+  "font": "\"PingFang SC\", \"Noto Sans CJK SC\", \"Microsoft YaHei\", sans-serif",
+  "canvas": "#F8F9FA",
+  "dot": "#D5D8DD",
+  "card": "#FFFFFF",
+  "text": "#1F2329",
+  "textSecondary": "#646A73",
+  "textMuted": "#8F959E",
+  "border": "#DEE0E3",
+  "primary": "#3370FF",
+  "line": "#646A73",
+  "status": {
+    "new":     { "fill": "#DDF5E7", "stroke": "#34C77B", "text": "#1F7A4D", "label": "新增" },
+    "changed": { "fill": "#FFF0D6", "stroke": "#F5A524", "text": "#A15C00", "label": "修改" },
+    "risk":    { "fill": "#FFE4E4", "stroke": "#F07272", "text": "#B42318", "label": "风险" },
+    "none":    { "fill": "#FFFFFF", "stroke": "#DEE0E3", "text": "#1F2329", "label": "不变" }
+  },
+  "layers": [
+    { "fill": "#EEF3FF", "stroke": "#C9D8FF" },
+    { "fill": "#FFF8DB", "stroke": "#F5E2A0" },
+    { "fill": "#F1ECFF", "stroke": "#D6CCFA" },
+    { "fill": "#E9EEFB", "stroke": "#C7D2F0" },
+    { "fill": "#F2F3F5", "stroke": "#DEE0E3" }
+  ],
+  "flow": {
+    "start":    { "fill": "#E8E2FF", "stroke": "#8B73F0" },
+    "end":      { "fill": "#E8E2FF", "stroke": "#8B73F0" },
+    "step":     { "fill": "#EEF3FF", "stroke": "#7A9CF5" },
+    "decision": { "fill": "#FFF5C2", "stroke": "#E0B400" },
+    "error":    { "fill": "#FFE4E4", "stroke": "#F07272" }
+  },
+  "score": {
+    "good": { "fill": "#DDF5E7", "text": "#1F7A4D", "mark": "✓" },
+    "mid":  { "fill": "#FFF5C2", "text": "#8A6A00", "mark": "△" },
+    "bad":  { "fill": "#FFE4E4", "text": "#B42318", "mark": "✕" }
+  }
+}

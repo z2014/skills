@@ -8,8 +8,8 @@
     {
       "name": "skills",
       "source": "./",
-      "description": "Development principles: ubiquitous language, tracer bullets, deep modules, unidirectional dependencies; React frontend conventions.",
-      "version": "0.3.6",
+      "description": "Development principles: ubiquitous language, tracer bullets, deep modules, unidirectional dependencies; React frontend conventions; Feishu-whiteboard-style diagrams.",
+      "version": "0.4.0",
       "license": "MIT"
     }
   ]

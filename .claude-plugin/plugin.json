@@ -1,10 +1,10 @@
 {
   "name": "skills",
-  "version": "0.3.6",
-  "description": "Agent skills by z2014: development principles (ubiquitous language, tracer bullets, deep modules).",
+  "version": "0.4.0",
+  "description": "Agent skills by z2014: development principles (ubiquitous language, tracer bullets, deep modules), React frontend conventions, and Feishu-whiteboard-style diagrams.",
   "author": { "name": "z2014", "url": "https://github.com/z2014" },
   "homepage": "https://github.com/z2014/skills",
   "repository": "https://github.com/z2014/skills",
   "license": "MIT",
-  "keywords": ["skills", "development-principles", "ddd", "tracer-bullet", "deep-modules", "unidirectional-dependencies", "react", "frontend"]
+  "keywords": ["skills", "development-principles", "ddd", "tracer-bullet", "deep-modules", "unidirectional-dependencies", "react", "frontend", "diagram"]
 }
