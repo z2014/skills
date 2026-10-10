@@ -1,6 +1,6 @@
 ---
 name: frontend-dev
-description: "React frontend conventions: Vite, TypeScript, Tailwind v4, shadcn/ui, React Router, TanStack Query, Zustand, React Hook Form + Zod, pnpm, and a modules/common/api/store project layout. Use when creating or changing React frontend code, pages, components, styles, state, or frontend tooling. React 前端开发规范：在新建或修改 React 页面、组件、样式、状态管理或前端工程配置时使用。"
+description: "React frontend conventions: Vite, TypeScript, Tailwind v4, shadcn/ui, React Router, axios, TanStack Query, Zustand, React Hook Form + Zod, pnpm, and a modules/common/api/store project layout. Use when creating or changing React frontend code, pages, components, styles, state, or frontend tooling. React 前端开发规范：在新建或修改 React 页面、组件、样式、状态管理或前端工程配置时使用。"
 ---
 
 # React 前端开发
@@ -16,6 +16,7 @@ description: "React frontend conventions: Vite, TypeScript, Tailwind v4, shadcn/
 | 样式 | Tailwind CSS v4，通过 `@tailwindcss/vite` 引入 |
 | 组件 | shadcn/ui |
 | 路由 | React Router |
+| 网络请求 | axios（全局唯一实例） |
 | 服务端数据 | TanStack Query |
 | 全局客户端状态 | Zustand |
 | 表单与校验 | React Hook Form + Zod |
@@ -39,7 +40,7 @@ src/
 ├── common/
 │   ├── components/       # 全局公共组件；shadcn/ui 组件放在 common/components/ui
 │   └── utils/            # 全局公共工具函数，包括 cn()
-├── api/                  # 后端接口：请求函数、Zod schema、query key，按业务领域分文件
+├── api/                  # client/ 为全局 axios 实例；其他子目录按业务领域存放请求函数、Zod schema、query key
 └── store/                # 只存放全局状态（Zustand）
 ```
 
@@ -64,9 +65,27 @@ src/
 - 筛选条件、分页和当前标签页放在 URL 参数中。
 - 能从已有状态计算出来的值，直接计算，不另外存储。
 
+## 网络请求
+
+- 统一使用 axios。整个项目只创建一个实例，放在 `src/api/client/index.ts`。其他地方不再调用 `axios.create`、`axios.get` 等，也不直接使用 `fetch`。
+- 通用配置都在这个实例上设置：`baseURL`（从环境变量 `VITE_API_BASE_URL` 读取）、超时时间和默认请求头。
+- 请求拦截器统一添加请求头，例如鉴权 token、语言、请求追踪 ID。
+- 后端响应统一使用 `{ code, data, message }` 结构。响应拦截器统一处理：
+  - `code` 表示成功时，取出 `data` 返回给调用方；成功值以项目约定为准（例如 `0`）。
+  - `code` 表示失败时，即使 HTTP 状态码为 200，也按失败处理，并以 `message` 作为错误提示。
+  - 所有失败（网络错误、HTTP 错误、业务错误）转换为统一的 `ApiError` 类型，包含 HTTP 状态码、`code` 和 `message`；上层只处理这一种错误。
+  - 记录错误日志：开发环境输出到控制台，生产环境上报到监控服务。日志中不记录 token、密码等敏感信息。
+  - 默认弹出错误提示。单个请求可以通过请求配置关闭（例如 `silent: true`），由页面自行处理。
+  - 401 统一处理：刷新 token 或跳转登录页。多个请求同时返回 401 时只刷新一次，其余请求等待刷新完成后重试。
+  - 主动取消的请求不弹窗，也不记录错误日志。
+- 获取 token、弹出提示、跳转登录页需要用到 `store` 和界面层，但 `api` 不能反向依赖它们。由 `api/client` 提供配置函数（例如 `configureHttpClient({ getToken, notifyError, onUnauthorized })`），在 `main.tsx` 中注入具体实现。
+- 自定义请求配置（如 `silent`）通过 TypeScript 模块扩展声明类型，不使用 `any`。
+- 业务请求函数按领域放在 `src/api/<domain>/index.ts`，调用全局实例，并用 Zod 校验 `data` 的结构。
+- 与 TanStack Query 配合：把 Query 提供的 `signal` 传给 axios，以支持取消请求；错误提示已经在拦截器中处理，Query 的 `onError` 中不再重复弹窗。
+
 ## 数据与 API
 
-- 所有后端请求定义在 `api/` 中，模块和组件不直接调用 `fetch`。
+- 所有后端请求通过 `src/api/` 中的全局 axios 实例发出，模块和组件不直接调用 axios 或 `fetch`。
 - 在 `api/` 中使用 Zod 校验响应数据，并从 schema 推导 TypeScript 类型。
 - 每个数据视图都要处理加载中、空数据和出错三种状态。在路由层设置错误边界（Error Boundary）。
 - 修改数据后，使相关 query 失效或更新缓存，不手动同步多份数据。
