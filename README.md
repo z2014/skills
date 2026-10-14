@@ -58,9 +58,9 @@ Agents read skill descriptions in every session and load the full skill when a t
 
 | Skill | 说明 |
 | --- | --- |
-| [`dev-principles`](skills/dev-principles/SKILL.md) | 开发原则 |
-| [`frontend-dev`](skills/frontend-dev/SKILL.md) | React 前端开发规范 |
-| [`diagram`](skills/diagram/SKILL.md) | 飞书画板风格画图规范 |
+| [`dev-principles`](skills/dev-principles/SKILL.md) | 开发原则：统一语言、贯通路径、深模块、单向依赖 |
+| [`frontend-dev`](skills/frontend-dev/SKILL.md) | React 前端开发规范：Vite、Tailwind v4、shadcn/ui、TanStack Query、Zustand、项目结构 |
+| [`diagram`](skills/diagram/SKILL.md) | 飞书画板风格画图规范：分层架构图、流程图、时序图、方案对比矩阵 |
 
 ### 安装
 
