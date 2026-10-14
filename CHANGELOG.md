@@ -1,5 +1,10 @@
 # Changelog
 
+## 0.4.1 - 2026-10-14
+
+- Use the plugin description for the marketplace metadata and plugin entry.
+- Expand the Chinese README skill table so each row lists what the skill covers.
+
 ## 0.4.0 - 2026-10-10
 
 - Add `diagram` skill: Feishu-whiteboard-style diagrams (layered architecture, flowchart, sequence, comparison matrix, and a Mermaid fallback) rendered from structured JSON with stable element ids.

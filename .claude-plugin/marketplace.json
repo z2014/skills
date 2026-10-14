@@ -2,14 +2,14 @@
   "name": "z2014",
   "owner": { "name": "z2014", "url": "https://github.com/z2014" },
   "metadata": {
-    "description": "Agent skills by z2014."
+    "description": "Agent skills by z2014: development principles (ubiquitous language, tracer bullets, deep modules), React frontend conventions, and Feishu-whiteboard-style diagrams."
   },
   "plugins": [
     {
       "name": "skills",
       "source": "./",
-      "description": "Development principles: ubiquitous language, tracer bullets, deep modules, unidirectional dependencies; React frontend conventions; Feishu-whiteboard-style diagrams.",
-      "version": "0.4.0",
+      "description": "Agent skills by z2014: development principles (ubiquitous language, tracer bullets, deep modules), React frontend conventions, and Feishu-whiteboard-style diagrams.",
+      "version": "0.4.1",
       "license": "MIT"
     }
   ]
