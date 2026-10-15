@@ -1,6 +1,6 @@
 ---
 name: feature-dev
-description: "Guided feature development with codebase understanding and architecture focus, using specialized agents for codebase exploration, architecture design, and quality review. Use for new features that touch multiple files, need architectural decisions, or have unclear requirements; not for single-line fixes, trivial changes, or urgent hotfixes. 引导式功能开发，重在理解代码库和架构设计，使用专门的 agent 进行代码库探索、架构设计和质量审查。用于涉及多个文件、需要架构决策或需求不够明确的新功能；不用于单行修复、琐碎改动或紧急热修复。"
+description: "引导式功能开发，重在理解代码库和架构设计，使用专门的 agent 进行代码库探索、架构设计和质量审查。用于涉及多个文件、需要架构决策或需求不够明确的新功能；不用于单行修复、琐碎改动或紧急热修复。"
 license: Apache-2.0
 ---
 
