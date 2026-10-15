@@ -10,10 +10,11 @@ Agent skills that follow the open [Agent Skills](https://agentskills.io) format.
 | --- | --- |
 | [`dev-principles`](skills/dev-principles/SKILL.md) | Development principles: ubiquitous language, tracer bullets, deep modules, unidirectional dependencies |
 | [`frontend-dev`](skills/frontend-dev/SKILL.md) | React frontend conventions: Vite, Tailwind v4, shadcn/ui, TanStack Query, Zustand, project layout |
+| [`ui-ux`](skills/ui-ux/SKILL.md) | Reference-based design systems and interaction refinement: visual hierarchy, typography, motion, responsive layouts, dragging, keyboard interaction |
 | [`diagram`](skills/diagram/SKILL.md) | Feishu-whiteboard-style diagrams: layered architecture, flowchart, sequence, comparison matrix |
 | [`feature-dev`](skills/feature-dev/SKILL.md) | Guided feature development: discovery, codebase exploration, clarifying questions, architecture design, implementation, quality review, summary |
 
-The skill content is written in Chinese. Skill descriptions are bilingual so that agents can select the skills in either language.
+The skill content is written in Chinese. Skill descriptions state when each skill applies.
 
 ### Install
 
@@ -53,6 +54,7 @@ Agents read skill descriptions in every session and load the full skill when a t
 - Ubiquitous language: *Domain-Driven Design*, Eric Evans
 - Unidirectional dependencies: the Acyclic and Stable Dependencies Principles in *Agile Software Development: Principles, Patterns, and Practices*, and the Dependency Rule in *Clean Architecture*, Robert C. Martin
 - `feature-dev`: Chinese translation of the [`feature-dev`](https://github.com/anthropics/claude-plugins-official/tree/main/plugins/feature-dev) plugin in anthropics/claude-plugins-official, licensed under Apache License 2.0
+- `ui-ux`: design-system and interaction guidance synthesized from [`open-claude-ui`](https://github.com/Caho1/open-claude-ui), with browser and accessibility references linked in the skill
 
 ## 中文
 
@@ -62,6 +64,7 @@ Agents read skill descriptions in every session and load the full skill when a t
 | --- | --- |
 | [`dev-principles`](skills/dev-principles/SKILL.md) | 开发原则：统一语言、贯通路径、深模块、单向依赖 |
 | [`frontend-dev`](skills/frontend-dev/SKILL.md) | React 前端开发规范：Vite、Tailwind v4、shadcn/ui、TanStack Query、Zustand、项目结构 |
+| [`ui-ux`](skills/ui-ux/SKILL.md) | UI/UX 设计与交互打磨：参考界面设计系统提取、视觉层级、排版、动效、响应式布局、拖拽、键盘交互 |
 | [`diagram`](skills/diagram/SKILL.md) | 飞书画板风格画图规范：分层架构图、流程图、时序图、方案对比矩阵 |
 | [`feature-dev`](skills/feature-dev/SKILL.md) | 引导式功能开发：需求理解、代码库探索、澄清问题、架构设计、实现、质量审查、总结 |
 
@@ -103,6 +106,7 @@ Agent 在每次会话中都会读取 skill 的描述，并在任务匹配时加�
 - 统一语言（Ubiquitous Language）：《领域驱动设计》
 - 单向依赖（Unidirectional Dependencies）：《敏捷软件开发：原则、模式与实践》中的无环依赖原则与稳定依赖原则，《架构整洁之道》中的依赖规则
 - `feature-dev`：译自 anthropics/claude-plugins-official 的 [`feature-dev`](https://github.com/anthropics/claude-plugins-official/tree/main/plugins/feature-dev) 插件，采用 Apache License 2.0
+- `ui-ux`：参考 [`open-claude-ui`](https://github.com/Caho1/open-claude-ui) 归纳设计系统与交互方法，浏览器及可访问性参考见 skill 内文档
 
 ## License
 

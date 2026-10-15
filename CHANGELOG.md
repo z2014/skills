@@ -1,5 +1,10 @@
 # Changelog
 
+## 0.6.0 - 2026-10-15
+
+- 新增中文 `ui-ux` skill：合并参考界面设计系统提取与交互打磨，覆盖视觉映射、动效、响应式布局、拖拽、键盘与场景验证。
+- 同步 README、插件说明与市场版本信息。
+
 ## 0.5.1 - 2026-10-15
 
 - Fix duplicate phase numbers in `feature-dev`: Quality Review is now phase 7 and Summary is phase 8.
