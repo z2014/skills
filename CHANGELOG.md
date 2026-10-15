@@ -1,5 +1,9 @@
 # Changelog
 
+## 0.5.1 - 2026-10-15
+
+- Fix duplicate phase numbers in `feature-dev`: Quality Review is now phase 7 and Summary is phase 8.
+
 ## 0.5.0 - 2026-10-15
 
 - Add `feature-dev` skill: a Chinese translation of the `feature-dev` plugin in anthropics/claude-plugins-official (7-phase guided feature development with `code-explorer`, `code-architect`, and `code-reviewer` agents). The skill stays under Apache License 2.0; the plugin license is now `MIT AND Apache-2.0`.

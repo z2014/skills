@@ -9,7 +9,7 @@
       "name": "skills",
       "source": "./",
       "description": "Agent skills by z2014: development principles (ubiquitous language, tracer bullets, deep modules), React frontend conventions, Feishu-whiteboard-style diagrams, and a guided feature development workflow.",
-      "version": "0.5.0",
+      "version": "0.5.1",
       "license": "MIT AND Apache-2.0"
     }
   ]

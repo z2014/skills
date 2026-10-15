@@ -110,7 +110,7 @@ license: Apache-2.0
 
 ---
 
-## 阶段 6：质量审查（Quality Review）
+## 阶段 7：质量审查（Quality Review）
 
 **目标**：确保代码简洁、DRY、优雅、易读且功能正确
 
@@ -122,7 +122,7 @@ license: Apache-2.0
 
 ---
 
-## 阶段 7：总结（Summary）
+## 阶段 8：总结（Summary）
 
 **目标**：记录完成了什么
 
