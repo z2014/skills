@@ -1,6 +1,6 @@
 {
   "name": "skills",
-  "version": "0.5.0",
+  "version": "0.5.1",
   "description": "Agent skills by z2014: development principles (ubiquitous language, tracer bullets, deep modules), React frontend conventions, Feishu-whiteboard-style diagrams, and a guided feature development workflow.",
   "author": { "name": "z2014", "url": "https://github.com/z2014" },
   "homepage": "https://github.com/z2014/skills",
